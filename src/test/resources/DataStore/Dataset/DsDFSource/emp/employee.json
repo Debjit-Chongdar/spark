@@ -1,0 +1,14 @@
+{"id":1,"name":"Ram","salary":50000.00,"deptId":101,"address":[{"city":"Pune","state":"Maharastra","country":"India"}]}
+{"id":5,"name":"Rohim","salary":43000.00,"deptId":101,"address":[{"city":"Pune","state":"Maharastra","country":"India"}]}
+{"id":7,"name":"John","salary":28000.00,"deptId":101,"address":[{"city":"Bangalore","state":"Karnataka","country":"India"}]}
+{"id":9,"name":"Sam","salary":25000.00,"deptId":202,"address":[{"city":"Pune","state":"Maharastra","country":"India"}]}
+{"id":11,"name":"Rohan","salary":34000.00,"deptId":101,"address":[{"city":"Pune","state":"Maharastra","country":"India"}]}
+{"id":13,"name":"Saptak","salary":38000.00,"deptId":101,"address":[{"city":"Kolkata","state":"West Bengal","country":"India"}]}
+{"id":2,"name":"Prakash","salary":78000.00,"deptId":202,"address":[{"city":"Kolkata","state":"West Bengal","country":"India"}]}
+{"id":6,"name":"Sumen","salary":83000.00,"deptId":101,"address":[{"city":"Kolkata","state":"West Bengal","country":"India"}]}
+{"id":8,"name":"Sidharta","salary":54000.00,"deptId":101,"address":[{"city":"Kolkata","state":"West Bengal","country":"India"}]}
+{"id":23,"name":"Satayu","salary":35000.00,"deptId":202,"address":[{"city":"Kolkata","state":"West Bengal","country":"India"}]}
+{"id":43,"name":"Payal","salary":18900.00,"deptId":101,"address":[{"city":"Bangalore","state":"Karnataka","country":"India"}]}
+{"id":54,"name":"Priti","salary":23000.00,"deptId":101,"address":[{"city":"Bangalore","state":"Karnataka","country":"India"}]}
+{"id":43,"name":"Urbhashi","salary":54000.00,"deptId":101,"address":[{"city":"Bangalore","state":"Karnataka","country":"India"}]}
+{"id":3,"name":"Prem","salary":45000.00,"deptId":101,"address":[{"city":"Bangalore","state":"Karnataka","country":"India"}]}

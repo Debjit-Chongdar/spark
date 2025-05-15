@@ -1,0 +1,11 @@
+id,name,sal,country,age,rating,dept_id
+1,Ram,6000,India,26,Excelent,001
+2,Sam,4000,India,22,Good,003
+3,Jadu,8000,India,28,Very Good,002
+4,Madhu,7000,India,27,Good,003
+5,Rohit,3000,India,28,Excelent,002
+6,Palas,2000,India,20,Poor,001
+7,Timir,7000,India,30,Excelent,002
+8,Samir,3000,India,27,Good,001
+9,Amit,6200,India,29,Very Good,002
+10,Avijit,7300,India,30,Good,001

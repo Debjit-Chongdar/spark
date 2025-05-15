@@ -1,0 +1,10 @@
+{"id":"1","name":"Ram","sal":"6000","country":"India","age":"26","rating":"Excelent","dept_id":"001"}
+{"id":"2","name":"Sam","sal":"4000","country":"India","age":"22","rating":"Good","dept_id":"003"}
+{"id":"3","name":"Jadu","sal":"8000","country":"India","age":"28","rating":"Very Good","dept_id":"002"}
+{"id":"4","name":"Madhu","sal":"7000","country":"India","age":"27","rating":"Good","dept_id":"003"}
+{"id":"5","name":"Rohit","sal":"3000","country":"India","age":"28","rating":"Excelent","dept_id":"002"}
+{"id":"6","name":"Palas","sal":"2000","country":"India","age":"20","rating":"Poor","dept_id":"001"}
+{"id":"7","name":"Timir","sal":"7000","country":"India","age":"30","rating":"Excelent","dept_id":"002"}
+{"id":"8","name":"Samir","sal":"3000","country":"India","age":"27","rating":"Good","dept_id":"001"}
+{"id":"9","name":"Amit","sal":"6200","country":"India","age":"29","rating":"Very Good","dept_id":"002"}
+{"id":"10","name":"Avijit","sal":"7300","country":"India","age":"30","rating":"Good","dept_id":"001"}
