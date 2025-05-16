@@ -21,15 +21,12 @@ public class AppControllerTest {
 	@BeforeClass
 	public static void setUp() {
 		controller = new AppController();
-		
-		String hadoopHomePath = AppControllerTest.class.getResource("/hadoop-2.6.5/").getPath();
-		System.setProperty("hadoop.home.dir", hadoopHomePath);
-		
+
 		sparkSession = SparkSession
 				.builder()
-				.appName("App Test")
+				.appName("AppTest")
 				.master("local[*]")
-				.config("spark.testing.memory", "2147480000")
+				//.config("spark.testing.memory", "2147480000")
 				.getOrCreate();
 	}
 
