@@ -1,0 +1,10 @@
+1. each action will create execution plan from action point to start
+2. if any shuffle happened between action & start, then it will skip previous stage of suffle (It will be shown in DAG as skipped)
+3. -> each action create a new job
+4. -> each shuffle between partition, creates a new stage
+5. -> each transformation creates a new task
+6. Action => reduce(Fn),collect(),count(), take(5), first(), save(), foreach (sortByKey(true))
+7. Shuffle => reduceByKey(Fn),groupByKey(),sortByKey(false),repartition(6),coalesce(2)
+8. Transformation => map(Fn), mapToPair(PairFn), flatMap(Iterator),
+9. Join is possible only on JavaPairRdd(key)   # -> return JavaPairRDD<key, Tuple2(1st_val, 2nd_val)>
+10. jsc.parallelize() / jsc.textFIle()
