@@ -1,8 +1,8 @@
 package com.spark.feature;
 
-import com.spark.feature.bean.dataset.DatasetPivotTable;
-import com.spark.feature.bean.dataset.DatasetRow;
-import com.spark.feature.bean.dataset.UDFImplDataset;
+import com.spark.feature.datasetImpl.DatasetPivotTable;
+import com.spark.feature.datasetImpl.DatasetRow;
+import com.spark.feature.datasetImpl.UDFImplDataset;
 import org.apache.spark.sql.SparkSession;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

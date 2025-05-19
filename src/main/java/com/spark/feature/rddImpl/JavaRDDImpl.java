@@ -1,6 +1,6 @@
-package com.spark.feature.rdd;
+package com.spark.feature.rddImpl;
 
-import com.spark.feature.bean.rdd.*;
+import com.spark.feature.util.funcImpl.*;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;

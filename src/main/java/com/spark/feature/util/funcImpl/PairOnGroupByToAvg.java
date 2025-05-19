@@ -1,4 +1,4 @@
-package com.spark.feature.bean.rdd;
+package com.spark.feature.util.funcImpl;
 
 import com.google.common.collect.Iterables;
 import org.apache.spark.api.java.function.PairFunction;

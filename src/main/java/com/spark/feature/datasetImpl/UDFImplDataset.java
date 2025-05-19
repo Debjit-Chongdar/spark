@@ -1,6 +1,6 @@
-package com.spark.feature.bean.dataset;
+package com.spark.feature.datasetImpl;
 
-import com.spark.feature.dataset.EmployeeResultUDF2;
+import com.spark.feature.util.udfImpl.EmployeeResultUDF2;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;

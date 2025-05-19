@@ -1,7 +1,6 @@
 package com.spark.feature;
 
-import com.spark.feature.rdd.JavaRDDImpl;
-import in.apache.spark.controller.AppController;
+import com.spark.feature.rddImpl.JavaRDDImpl;
 import org.apache.spark.sql.SparkSession;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

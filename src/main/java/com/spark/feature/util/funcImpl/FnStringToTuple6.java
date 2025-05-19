@@ -1,4 +1,4 @@
-package com.spark.feature.bean.rdd;
+package com.spark.feature.util.funcImpl;
 
 import org.apache.spark.api.java.function.Function;
 import scala.Tuple6;

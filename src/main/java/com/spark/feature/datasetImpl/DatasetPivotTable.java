@@ -1,4 +1,4 @@
-package com.spark.feature.bean.dataset;
+package com.spark.feature.datasetImpl;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
