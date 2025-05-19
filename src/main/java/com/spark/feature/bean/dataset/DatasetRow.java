@@ -8,10 +8,8 @@ import org.apache.spark.sql.types.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import static org.apache.spark.sql.functions.col;
-import static org.apache.spark.sql.functions.date_format;
+import static org.apache.spark.sql.functions.*;
 
 public class DatasetRow {
     private SparkSession session;
@@ -19,7 +17,7 @@ public class DatasetRow {
         this.session = sparkSession;
     }
 
-    public void filterOperation(String csvPath){
+    public void filterOnDataset(String csvPath){
         Dataset<Row> inputDs = session.read().option("header", true).csv(csvPath);
         //filter using expression
         Dataset<Row> goodSeniorDsEx = inputDs.filter("age >= 27 and rating='Good'");
@@ -43,7 +41,7 @@ public class DatasetRow {
     }
 
     //it will not take value from a file instead in memory
-    public void inMemoryOperation(){
+    public void inMemoryOperationBySQLAndDatasetFunction(){
         List<Row> values = new ArrayList<>();
         values.add(RowFactory.create("Ram",6000,"India","2016-12-19 04:39:32"));
         values.add(RowFactory.create("Sam",4000,"India","2018-10-19 04:39:32"));
@@ -67,17 +65,21 @@ public class DatasetRow {
                 "date_format(datetime, 'MM') AS mn, salary FROM Emp_temp order by mn desc");
         formatedDateDs = formatedDateDs.drop("mn");
     /*action*/formatedDateDs.show();
-        Dataset<Row> selectDs = emplDs.select("name", "datetime"
+//----------------------------------- USING DATASET / DATAFRAME --------------------------------------------------
+        Dataset<Row> grpDs = emplDs.groupBy("name").agg(
+                sum("salary").as("total"),
+                collect_list("salary").as("sal_list"), count("salary").as("count")
+        );
+    /*action*/grpDs.show();
+        Dataset<Row> formatedDtDs = emplDs.select("name", "datetime"
                 /*,"date_format(datetime, 'DDD')" it will not work*/ );
         //to make it work we have two different way // Using date_format function
-        selectDs = selectDs.select(col("name"), date_format(col("datetime"), "YYYY").as("year"),
-                col("datetime"), date_format(col("datetime"), "MMM").as("month"));
-    /*Action*/selectDs.show();
-        //using select expression
-        Dataset<Row> selectExDs = selectDs.selectExpr("name", "year","month", "datetime"
-                ,"date_format(datetime, 'MM') AS month_num");
-        Dataset<Row> grpCount = selectExDs.groupBy("year", "month").count().orderBy("year");
-    /*action*/grpCount.show();
+        formatedDtDs = formatedDtDs.select(col("name"), col("datetime"),
+                date_format(col("datetime"), "YYYY").as("year"),
+                date_format(col("datetime"), "MMM").as("month"),
+                date_format(col("datetime"), "MM").as("mn"))
+                .orderBy(col("mn").desc());
+    /*Action*/formatedDtDs.show();
         /*Scanner sc = new Scanner(System.in);
         sc.nextLine();*/ //enable this too see Spark UI view
     }

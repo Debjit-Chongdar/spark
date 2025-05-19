@@ -1,7 +1,8 @@
 package com.spark.feature;
 
+import com.spark.feature.bean.dataset.DatasetPivotTable;
 import com.spark.feature.bean.dataset.DatasetRow;
-import com.spark.feature.rdd.JavaRDDImpl;
+import com.spark.feature.bean.dataset.UDFImplDataset;
 import org.apache.spark.sql.SparkSession;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -10,6 +11,8 @@ import org.junit.Test;
 public class DatasetRowTest {
     private static SparkSession sparkSession;
     private static DatasetRow datasetRow;
+    private static DatasetPivotTable datasetPivotTable;
+    private static UDFImplDataset udfImplDataset;
 
     @BeforeClass
     public static void setUp() {
@@ -19,17 +22,30 @@ public class DatasetRowTest {
                 .master("local[*]")
                 //.config("spark.testing.memory", "2147480000")
                 .getOrCreate();
+        sparkSession.sparkContext().setLogLevel("ERROR");
         datasetRow = new DatasetRow(sparkSession);
+        datasetPivotTable = new DatasetPivotTable(sparkSession);
+        udfImplDataset = new UDFImplDataset(sparkSession);
     }
 
     @Test
-    public void testFilterOperation(){
-        datasetRow.filterOperation(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
+    public void testFilterOnDataset(){
+        datasetRow.filterOnDataset(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
     }
 
     @Test
-    public void testInMemoryOperation(){
-        datasetRow.inMemoryOperation();
+    public void testInMemoryOperationBySQLAndDatasetFunction(){
+        datasetRow.inMemoryOperationBySQLAndDatasetFunction();
+    }
+
+    @Test
+    public void testConvertToPivotTable(){
+        datasetPivotTable.convertToPivotTable(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
+    }
+
+    @Test
+    public void testUseUdfInSql(){
+        udfImplDataset.useUdfInSql(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
     }
 
     @AfterClass

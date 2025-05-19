@@ -22,6 +22,7 @@ public class JavaRDDImplTest {
                 .master("local[*]")
                 //.config("spark.testing.memory", "2147480000")
                 .getOrCreate();
+        sparkSession.sparkContext().setLogLevel("ERROR");
         javaRDDImpl = new JavaRDDImpl(sparkSession);
     }
 
