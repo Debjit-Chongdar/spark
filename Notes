@@ -8,3 +8,8 @@
 8. Transformation => map(Fn), mapToPair(PairFn), flatMap(Iterator),
 9. Join is possible only on JavaPairRdd(key)   # -> return JavaPairRDD<key, Tuple2(1st_val, 2nd_val)>
 10. jsc.parallelize() / jsc.textFIle()
+
+11. sortAggregation is slower than hashAggregation, (HashAggregate is more faster with JavaAPI instead sql on temp table)
+            hashAggregation apply if sortBy column is part of groupBy columns
+        or  if it's not part of groupBy column but it's mutable type like Integer, Long, Double, Short, etc
+                where size is fixed like 32 bit for Integer, 64 bit for Long, not varargs like String.

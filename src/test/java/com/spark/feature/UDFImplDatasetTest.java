@@ -1,35 +1,30 @@
 package com.spark.feature;
 
-import com.spark.feature.datasetImpl.DatasetRow;
+import com.spark.feature.datasetImpl.UDFImplDataset;
 import org.apache.spark.sql.SparkSession;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class DatasetRowTest {
+public class UDFImplDatasetTest {
+    private static UDFImplDataset udfImplDataset;
     private static SparkSession sparkSession;
-    private static DatasetRow datasetRow;
 
     @BeforeClass
     public static void setUp() {
         sparkSession = SparkSession
                 .builder()
-                .appName("AppTest")
+                .appName("DatasetPivotTable Test")
                 .master("local[*]")
                 //.config("spark.testing.memory", "2147480000")
                 .getOrCreate();
         sparkSession.sparkContext().setLogLevel("ERROR");
-        datasetRow = new DatasetRow(sparkSession);
+        udfImplDataset = new UDFImplDataset(sparkSession);
     }
 
     @Test
-    public void testFilterOnDataset() {
-        datasetRow.filterOnDataset(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
-    }
-
-    @Test
-    public void testInMemoryOperationBySQLAndDatasetFunction() {
-        datasetRow.inMemoryOperationBySQLAndDatasetFunction();
+    public void testUseUdfInSql(){
+        udfImplDataset.useUdfInSql(DatasetRowTest.class.getResource("/DataStore/Dataset/csv/inputEmp.csv").getPath());
     }
 
     @AfterClass
