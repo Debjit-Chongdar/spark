@@ -3,7 +3,7 @@
 3. -> each action create a new job
 4. -> each shuffle between partition, creates a new stage
 5. -> each transformation creates a new task
-6. Action => reduce(Fn),collect(),count(), take(5), first(), save(), foreach (sortByKey(true))
+6. Action => reduce(Fn),collect(),count(), take(5), first(), save(), foreach, explain(), (sortByKey(true))
 7. Shuffle => reduceByKey(Fn),groupByKey(),sortByKey(false),repartition(6),coalesce(2)
 8. Transformation => map(Fn), mapToPair(PairFn), flatMap(Iterator),
 9. Join is possible only on JavaPairRdd(key)   # -> return JavaPairRDD<key, Tuple2(1st_val, 2nd_val)>
@@ -13,3 +13,6 @@
             hashAggregation apply if sortBy column is part of groupBy columns
         or  if it's not part of groupBy column but it's mutable type like Integer, Long, Double, Short, etc
                 where size is fixed like 32 bit for Integer, 64 bit for Long, not varargs like String.
+12. batchInterval (Must be) ≤ windowDuration, windowDuration (Must be) ≥ batchInterval,
+        slideDuration Usually equals batchInterval, or a divisor of it
+
