@@ -65,6 +65,7 @@ public class DatasetRow {
                 "date_format(datetime, 'MM') AS mn, salary FROM Emp_temp order by mn desc");
         formatedDateDs = formatedDateDs.drop("mn");
     /*action*/formatedDateDs.show();
+        session.catalog().dropTempView("Emp_temp");
 //----------------------------------- USING DATASET / DATAFRAME --------------------------------------------------
         Dataset<Row> grpDs = emplDs.groupBy("name").agg(
                 sum("salary").as("total"),

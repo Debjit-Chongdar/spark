@@ -34,6 +34,7 @@ public class HashAggregationVsSortAgg {
                 "FROM user_view GROUP BY name ORDER BY month");
         // this one use "HashAggregate" as month dataType is int and it's Mutable (Type-int-32bit fixed size)
         grpIntDs.explain();
+        session.catalog().dropTempView("user_view");
         // --------------- this is Fastest ------------------------------------------------------------
         Dataset<Row> fastExecutionDs = ds.groupBy("name").agg(
                 functions.first(
