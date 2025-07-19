@@ -1,4 +1,4 @@
-package com.spark.feature.util.bean;
+package com.spark.feature.salting.bean;
 
 import java.io.Serializable;
 

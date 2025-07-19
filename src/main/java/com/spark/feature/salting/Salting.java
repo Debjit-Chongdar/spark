@@ -1,7 +1,7 @@
-package com.spark.feature.datasetImpl;
+package com.spark.feature.salting;
 
-import com.spark.feature.util.bean.Dept;
-import com.spark.feature.util.bean.Emp;
+import com.spark.feature.salting.bean.Dept;
+import com.spark.feature.salting.bean.Emp;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.Optional;
