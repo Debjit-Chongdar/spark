@@ -16,3 +16,30 @@
 12. batchInterval (Must be) ≤ windowDuration, windowDuration (Must be) ≥ batchInterval,
         slideDuration Usually equals batchInterval, or a divisor of it
 
+13. Dataset<Row> broadcastDs = functions.broadcast(inputDs);
+14. Broadcast<Map<String, Integer>> broadcastMap= jsc.broadcast(pairRDD.collectAsMap());
+    Map<String, Integer> map = broadcastMap.value();
+    // jsc.broadcast(javaRDD) is not possible as it only allow to broadcast small data
+    broadcastDs.unpersist(); Removes from executors, Can reuse later
+    broadcastMap.destroy();   Removes from executors and driver, Can't reuse later
+
+15. inputDs = inputDs.cache(); //eq// inputDs = inputDs.persist(StorageLevel.MEMORY_AND_DISK()); //MEMORY_ONLY_SER()
+16. inputRDD = inputRDD.cache(); //eq// inputRDD = inputRDD.persist(StorageLevel.MEMORY_AND_DISK_SER());//MEMORY_ONLY()
+    inputDs.unpersist(); // false
+    inputRDD.unpersist(true); // block until complete
+
+16. Dataset<Row> = ds1.join(ds2, ds1.col("abc").equalTo(ds2.col("abc")), "inner"); // outer // left_outer //
+17. JavaPairRDD<String, Tuple2<Double, Integer>> innerJoin = deptAvjSalRdd.join(deptNameRdd); // no optional
+18. JavaPairRDD<String, Tuple2<Double, Optional<Integer>>> left = deptAvjSalRdd.leftOuterJoin(deptNameRdd); // one optional
+19. JavaPairRDD<String, Tuple2<Optional<Double>, Optional<Integer>>> outer = deptAvjSalRdd.fullOuterJoin(deptNameRdd);
+
+20. inputDs.createOrReplaceTempView("Employee");
+    session.catalog().dropTempView("Employee");
+
+21. session.udf().register("empResultUDF", new EmployeeResultUDF2(), DataTypes.StringType); //return type
+    "select name, rating, age, empResultUDF(rating, age) as result from emp_view"
+
+    UDF2<String, String, String> resultUdf = (String rating, String age) -> {"test"};
+    session.udf().register("resultUDF", resultUdf, DataTypes.StringType);
+    Dataset<Row> redultDs1 = empDs.select("name", "rating", "age")
+                  .withColumn("result", functions.callUDF("resultUDF", col("rating"), col("age")));
