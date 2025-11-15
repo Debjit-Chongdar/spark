@@ -7,7 +7,9 @@
 7. Shuffle => reduceByKey(Fn),groupByKey(),sortByKey(false),repartition(6),coalesce(2)
 8. Transformation => map(Fn), mapToPair(PairFn), flatMap(Iterator),
 9. Join is possible only on JavaPairRdd(key)   # -> return JavaPairRDD<key, Tuple2(1st_val, 2nd_val)>
-10. jsc.parallelize() / jsc.textFIle()
+
+10. JavaRDD<String> inputRdd = jsc.parallelize() / jsc.textFIle()
+    Dataset<Row> inputDs = session.read().option("header", true).csv(csvPath);
 
 11. sortAggregation is slower than hashAggregation, (HashAggregate is more faster with JavaAPI instead sql on temp table)
             hashAggregation apply if sortBy column is part of groupBy columns
@@ -43,3 +45,8 @@
     session.udf().register("resultUDF", resultUdf, DataTypes.StringType);
     Dataset<Row> redultDs1 = empDs.select("name", "rating", "age")
                   .withColumn("result", functions.callUDF("resultUDF", col("rating"), col("age")));
+22. Encoder<Person> personEncoder = Encoders.bean(Person.class);
+    // Create a Dataset from the List
+    Dataset<Person> personDataset = spark.createDataset(personList, personEncoder);
+23. Dataset<Row> emplRows = session.createDataFrame(values, new StructType(structFields));
+    Dataset<Emp> emplDs = emplRows.as(Encoders.bean(Emp.class));
