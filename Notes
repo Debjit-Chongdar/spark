@@ -9,6 +9,7 @@
 9. Join is possible only on JavaPairRdd(key)   # -> return JavaPairRDD<key, Tuple2(1st_val, 2nd_val)>
 
 10. JavaRDD<String> inputRdd = jsc.parallelize() / jsc.textFIle()
+    jsc.parallelizePairs(Arrays.asList(new Tuple2<>("a", "abc"),...))
     Dataset<Row> inputDs = session.read().option("header", true).csv(csvPath);
 
 11. sortAggregation is slower than hashAggregation, (HashAggregate is more faster with JavaAPI instead sql on temp table)
@@ -52,3 +53,5 @@
     Dataset<Person> personDataset = spark.createDataset(personList, personEncoder);
     or
     Dataset<Emp> emplDs = emplRows.as(Encoders.bean(Emp.class));
+
+24. Salting : Dataset<Long> saltDs = session.range(5); // column name = id

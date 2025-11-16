@@ -2,12 +2,15 @@ package com.spark.feature.salting;
 
 import com.spark.feature.salting.bean.Dept;
 import com.spark.feature.salting.bean.Emp;
+import com.spark.feature.salting.bean.RandomUdf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.Optional;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.*;
+import org.apache.spark.sql.api.java.UDF0;
 import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import org.apache.spark.sql.expressions.Window;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
@@ -17,55 +20,35 @@ import java.util.*;
 import static org.apache.spark.sql.functions.*;
 
 public class Salting {
-    private SparkSession session =
-            SparkSession.builder().appName("Salting Dataset").master("local[*]").getOrCreate();
+    private SparkSession session;
 
-    public void salting_Dataset_join() {
-        session.sparkContext().setLogLevel("ERROR");
-        Dataset<Row> largeDataset = session.createDataFrame(
-                Arrays.asList(
-                        new Emp("Ind", "abc", 1),
-                        new Emp("Fr", "bcd", 2),
-                        new Emp("Aus", "efg", 2),
-                        new Emp("Swz", "cde", 1),
-                        new Emp("Amer", "def", 1)
-                ), Emp.class);
-        Dataset<Row> smallDataset = session.createDataset(
-                Arrays.asList(
-                        new Dept(1, "Eng"),
-                        new Dept(2, "Hr")
-                ), Encoders.bean(Dept.class)).toDF();
-        // use random number lesser than the minimum occurance in both side
-        int saltRange = 2;
-        Dataset<Row> saltedLargeDataset = largeDataset.withColumn("salted_dept_id",
-                concat(expr("CAST(FLOOR(RAND() * " + saltRange + ") AS INT)"), concat(lit("_"), largeDataset.col("dept_id"))));
+    public Salting(SparkSession session){
+        this.session = session;
+    }
 
-        Dataset<Row> expandedSmallDataset = smallDataset.flatMap((FlatMapFunction<Row, Row>) row -> {
-                    List<Row> rows = new ArrayList<>();
-                    for (int i = 0; i < saltRange; i++) {
-                        rows.add(RowFactory.create(i+"_"+row.getInt(0), row.getInt(0), row.getString(1)));
-                    }
-                    return rows.iterator();
-                }, RowEncoder.apply(new StructType()
-                        .add("salted_id", DataTypes.StringType)
-                        .add("id", DataTypes.IntegerType)
-                        .add("name", DataTypes.StringType)
-                )
-        );
-        saltedLargeDataset.show();
-        expandedSmallDataset.show();
-        Dataset<Row> joinedDataset = saltedLargeDataset.join(expandedSmallDataset,
-                saltedLargeDataset.col("salted_dept_id").equalTo(expandedSmallDataset.col("salted_id")), "leftouter");
-        joinedDataset = joinedDataset.drop("salted_dept_id", "salted_id");
-        joinedDataset.show();
-        //new Scanner(System.in).nextLine();
+    public void saltingOnDs(String empPath, String deptPath){
+        Dataset<Row> empDs = session.read().json(empPath);
+        Dataset<Row> deptDs = session.read().json(deptPath);
+        Dataset<Long> saltDs = session.range(5);
+        // cross join with dept as dept has less rows than empl
+        Dataset<Row> saltedDeptDs = deptDs.crossJoin(saltDs).withColumn("salted_id",
+                concat(deptDs.col("id"), functions.lit("_"), saltDs.col("id")));
+        //add random value of range 5 to dept_id in empl
+        session.udf().register("rand", new RandomUdf(), DataTypes.IntegerType);
+        Dataset<Row> saltedEmpDs = empDs.orderBy("deptId").withColumn("salted_dept_id",
+                concat(empDs.col("deptID"), functions.lit("_"), functions.callUDF("rand")));
+
+        Dataset<Row> joinedDS = saltedDeptDs.join(saltedEmpDs,
+                saltedDeptDs.col("salted_id").equalTo(saltedEmpDs.col("salted_dept_id")))
+                .drop("salted_dept_id","salted_id")
+                .select("name", "deptName","salary");
+        joinedDS.show();
     }
 
     // salting large dataset key
     // expand small dataset key
     // join both
     public void salting_RDD_join() {
-        session.sparkContext().setLogLevel("ERROR");
         JavaPairRDD<String, String> largeRDD = JavaSparkContext.fromSparkContext(session.sparkContext())
                 .parallelizePairs(Arrays.asList(
                         new Tuple2<>("a", "abc"),
@@ -102,7 +85,6 @@ public class Salting {
     }
 
     public void salting_GroupBy(){
-        session.sparkContext().setLogLevel("ERROR");
         JavaPairRDD<String, Integer> pairRDD = JavaSparkContext.fromSparkContext(session.sparkContext())
                 .parallelizePairs(Arrays.asList(
                         new Tuple2<>(1, "abc"),
@@ -121,10 +103,4 @@ public class Salting {
     //Salting can use repartition, window function, aggregation
     // dataset.repartition(col("salted_key"));
     // .over(Window.partitionBy("salted_key")) then re aggregate
-
-    public static void main(String[] args) {
-        new Salting().salting_Dataset_join();
-        new Salting().salting_RDD_join();
-        new Salting().salting_GroupBy();
-    }
 }
