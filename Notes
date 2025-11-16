@@ -45,8 +45,10 @@
     session.udf().register("resultUDF", resultUdf, DataTypes.StringType);
     Dataset<Row> redultDs1 = empDs.select("name", "rating", "age")
                   .withColumn("result", functions.callUDF("resultUDF", col("rating"), col("age")));
-22. Encoder<Person> personEncoder = Encoders.bean(Person.class);
-    // Create a Dataset from the List
+
+22. Dataset<Row> emplRows = session.createDataFrame(values, new StructType(structFields));
+    Dataset<Row> emplRows = session.createDataFrame(empl_list, Emp.class);
+23. Encoder<Person> personEncoder = Encoders.bean(Person.class);
     Dataset<Person> personDataset = spark.createDataset(personList, personEncoder);
-23. Dataset<Row> emplRows = session.createDataFrame(values, new StructType(structFields));
+    or
     Dataset<Emp> emplDs = emplRows.as(Encoders.bean(Emp.class));
