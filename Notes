@@ -55,3 +55,9 @@
     Dataset<Emp> emplDs = emplRows.as(Encoders.bean(Emp.class));
 
 24. Salting : Dataset<Long> saltDs = session.range(5); // column name = id
+
+25. Dataset<Row> streamDs = sparkSession.readStream()
+                    .format("kafka")
+                    .option("kafka.bootstrap.servers", "localhost:9092")
+                    .option("subscribe", "test-topic")
+                    .load();
