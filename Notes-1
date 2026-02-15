@@ -1,0 +1,44 @@
+🔥 What WOULD Bring Data to the Driver?
+    -> collect() , take() , first()
+    -> show()   // partially
+    -> count()  // only returns a number
+ ** write file after transformation is done by Executor, not bring back to Driver
+
+🚨 When Driver Crashes
+    -> 1️⃣ Using collect() -> If dataset is huge -> Entire data is sent to driver -> Driver OOM -> Job Crashes
+    -> 3️⃣ Large Broadcast Variable -> Driver first collects it, then distribute -> Driver OOM possible
+
+🔹 Case 1: Input Data > Executor Memory
+    This is common and usually handled gracefully by Spark.
+    ✅ What Spark Does
+        Spark does not load entire dataset into memory at once. It Splits data into partitions
+        Processes one partition at a time per executor
+    Uses:
+        Memory & Disk spill (if memory is insufficient)
+
+🔥 If Memory Is Not Enough
+1️⃣ Spill to Disk
+        For operations like:
+    -> Shuffle / Sort / Join / Aggregation
+    -> Spark spills intermediate data to disk automatically.
+
+2️⃣ OutOfMemoryError (Executor OOM)
+    -> A single partition is too large
+    -> Data skew
+    -> Huge collect inside transformation
+    -> Broadcast table too big
+
+🔹 Schema Evolution:
+    Schema evolution is the ability of a data system to handle changes in the structure (schema)
+    of data over time without breaking existing pipelines or queries.
+    🔹 Types of Schema Changes
+        ✅ 1. Add Column (Most Common) :  Add new nullable column.
+        ✅ 2. Remove Column :  May hide column (physical deletion depends on format).
+        ✅ 3. Rename Column :  Supported in advanced table formats like Delta.
+        ✅ 4. Change Data Type :  Limited support (e.g., INT → LONG may work).
+    spark.read.option("mergeSchema", "true").parquet("users")
+    df.write.format("delta").option("mergeSchema", "true").mode("append").save("users_delta")
+
+🔹 Narrow Transformation vs Wide Transformation
+    -> map() , filter() , flatMap() , mapPartitions() , union()
+    -> groupByKey() , reduceByKey() , distinct() , join() , repartition() , sortByKey()
